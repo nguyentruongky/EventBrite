@@ -6,6 +6,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Text, View} from 'react-native';
+import EventDetailScreen from '@src/screens/EventDetailScreen/EventDetailScreen';
 
 const Tab = createBottomTabNavigator();
 const tabOptions = {
@@ -43,7 +44,7 @@ export default function Tabs() {
           return getIcon(route.name, focused);
         },
       })}>
-      <Tab.Screen name="HomeScreen" component={HomeScreen} />
+      <Tab.Screen name="HomeScreen" component={EventDetailScreen} />
       <Tab.Screen name="SearchScreen" component={SearchScreen} />
       <Tab.Screen name="MyTicketScreen" component={MyTicketScreen} />
       <Tab.Screen name="FavoriteScreen" component={FavoriteScreen} />

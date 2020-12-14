@@ -4,18 +4,42 @@ import {Weight, getFont} from '@fonts';
 import AsyncImage from '@src/components/AsyncImage';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import VectorButton from '@src/components/VectorButton';
-import {dropShadow} from '@src/assets/shadow';
+import {ScrollView} from 'react-native-gesture-handler';
 
-const red = '#ff563f';
 const screenSize = Dimensions.get('window');
+const red = '#ff563f';
 
-export default function FocusEventItem() {
+export default function SimilarEventsView() {
   return (
     <View>
-      <View>
+      <Text
+        style={{
+          ...getFont(Weight.bold, 20),
+          color: 'black',
+          marginLeft: 16,
+          marginTop: 32,
+          marginBottom: 24,
+        }}>
+        More events like this
+      </Text>
+
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <EventItem />
+        <EventItem />
+        <EventItem />
+        <EventItem />
+      </ScrollView>
+    </View>
+  );
+}
+
+function EventItem() {
+  return (
+    <View style={{marginRight: 24}}>
+      <View style={{width: screenSize.width * 0.7}}>
         <AsyncImage
           height={160}
-          width={screenSize.width - 32}
+          width="100%"
           style={{
             borderRadius: 16,
             marginLeft: 16,
@@ -29,35 +53,37 @@ export default function FocusEventItem() {
           style={{
             flexDirection: 'row',
             justifyContent: 'flex-end',
-            marginTop: -40,
-            marginRight: 40,
+            marginTop: -24,
+            marginRight: 10,
             marginBottom: 8,
           }}>
           <VectorButton
             Library={AntDesign}
             name="upload"
-            size={24}
+            size={16}
             color="#6e7386"
             style={{
               backgroundColor: 'white',
-              width: 66,
-              height: 66,
+              width: 44,
+              height: 44,
               borderRadius: 36,
+              borderWidth: 0.5,
+              borderColor: 'gray',
               marginRight: 16,
-              ...dropShadow(),
             }}
           />
           <VectorButton
             Library={AntDesign}
             name="hearto"
-            size={24}
+            size={16}
             color="#6e7386"
             style={{
               backgroundColor: 'white',
-              width: 66,
-              height: 66,
+              width: 44,
+              height: 44,
+              borderWidth: 0.5,
+              borderColor: 'gray',
               borderRadius: 36,
-              ...dropShadow(),
             }}
           />
         </View>
@@ -89,8 +115,9 @@ export default function FocusEventItem() {
           </View>
           <View style={{marginLeft: 16}}>
             <Text
+              numberOfLines={2}
               style={{
-                ...getFont(Weight.bold, 20),
+                ...getFont(Weight.medium, 20),
                 color: 'black',
               }}>
               PRIDE At the Disco

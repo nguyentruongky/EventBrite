@@ -1,8 +1,14 @@
 import React from 'react';
 import {Image, TouchableOpacity} from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 
-export default function IconButton({icon, onPress = null, style = null}) {
+export default function VectorButton({
+  Library,
+  size,
+  name,
+  color,
+  onPress = null,
+  style = null,
+}) {
   return (
     <TouchableOpacity
       style={{
@@ -11,7 +17,7 @@ export default function IconButton({icon, onPress = null, style = null}) {
         ...style,
       }}
       onPress={onPress}>
-      {icon}
+      <Library name={name} size={size} color={color} />
     </TouchableOpacity>
   );
 }

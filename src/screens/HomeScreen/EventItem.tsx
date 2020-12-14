@@ -2,8 +2,8 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import {Weight, getFont} from '@fonts';
 import AsyncImage from '@src/components/AsyncImage';
-import IconButton from '@src/components/IconButton';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import VectorButton from '@src/components/VectorButton';
 
 export default function EventItem() {
   return (
@@ -58,16 +58,22 @@ export default function EventItem() {
             marginTop: -30,
             marginBottom: 8,
           }}>
-          <IconButton
-            icon={<AntDesign name="upload" size={24} color={'#6e7386'} />}
+          <VectorButton
+            Library={AntDesign}
+            name="upload"
+            size={24}
+            color="#6e7386"
             style={{
               backgroundColor: 'white',
               width: 44,
               height: 44,
             }}
           />
-          <IconButton
-            icon={<AntDesign name="hearto" size={24} color={'#6e7386'} />}
+          <VectorButton
+            Library={AntDesign}
+            name="hearto"
+            size={24}
+            color="#6e7386"
             style={{
               backgroundColor: 'white',
               width: 44,
