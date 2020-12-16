@@ -8,11 +8,12 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import TextButton from '@src/components/TextButton';
 import CircleButton from './CircleButton';
 import SimilarEventsView from './SimilarEventsView';
+import {Event} from '@src/models/Event';
 
-export default function Body() {
+export default function Body(event?: Event) {
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <TitleView />
+      {TitleView(event)}
       <TimeView />
       <LocationView />
       <AboutView />
@@ -24,7 +25,7 @@ export default function Body() {
   );
 }
 
-function TitleView() {
+function TitleView(event: Event) {
   return (
     <View style={{marginTop: 32}}>
       <Text
@@ -34,7 +35,7 @@ function TitleView() {
           marginBottom: 8,
           marginLeft: 16,
         }}>
-        PRIDE At The Disco
+        {event?.name}
       </Text>
       <Text
         style={{
@@ -42,7 +43,7 @@ function TitleView() {
           color: '#395de0',
           marginLeft: 16,
         }}>
-        by Westfield San Francisco Centre
+        by {event?.hostName}
       </Text>
     </View>
   );

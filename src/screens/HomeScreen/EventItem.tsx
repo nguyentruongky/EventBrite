@@ -4,10 +4,14 @@ import {Weight, getFont} from '@fonts';
 import AsyncImage from '@src/components/AsyncImage';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import VectorButton from '@src/components/VectorButton';
+import {Event} from '@src/models/Event';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
-export default function EventItem() {
+export default function EventItem({event, navigation}) {
+  const data = event as Event;
   return (
-    <View
+    <TouchableWithoutFeedback
+      onPress={() => navigation.push('EventDetailScreen', {data: event})}
       style={{
         flexDirection: 'row',
         paddingTop: 32,
@@ -20,9 +24,7 @@ export default function EventItem() {
           borderRadius: 16,
           marginLeft: 16,
         }}
-        uri={
-          'https://www.croatiaweek.com/wp-content/uploads/2019/12/101a2fe3-856c-46c3-a110-4e2bd1617ef9.jpg?x34489'
-        }
+        uri={data?.images[0].url}
       />
       <View style={{flex: 1, marginLeft: 32, marginRight: 8}}>
         <Text
@@ -30,7 +32,7 @@ export default function EventItem() {
             ...getFont(Weight.bold, 16),
             color: 'black',
           }}>
-          DIVA Royal - Queen Show San Francisco
+          {data?.name}
         </Text>
         <Text
           style={{
@@ -38,7 +40,14 @@ export default function EventItem() {
             color: '#6e7386',
             marginTop: 8,
           }}>
-          28 JUN • 07:00 PM GMT-7
+          {data?.startDate.toLocaleTimeString('en-us', {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
         </Text>
         <Text
           numberOfLines={1}
@@ -48,7 +57,7 @@ export default function EventItem() {
             marginTop: 8,
             marginRight: 32,
           }}>
-          The Cosmos Bar and Lounge
+          {data?.venue.name}
         </Text>
 
         <View
@@ -82,6 +91,6 @@ export default function EventItem() {
           />
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }

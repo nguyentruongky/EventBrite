@@ -1,13 +1,32 @@
-import React from 'react';
-import {View, Text, SafeAreaView, Dimensions} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, SafeAreaView, FlatList} from 'react-native';
 import {Weight, getFont} from '@fonts';
-import {ScrollView} from 'react-native-gesture-handler';
 import FocusEventItem from './FocusedEventItem';
 import EventItem from './EventItem';
+import useEvents from '@src/hooks/useEvents';
+import Screen from '@src/components/Screen';
+import EventDetailScreen from '../EventDetailScreen/EventDetailScreen';
+export const HomeRoutes = [Screen(EventDetailScreen)];
 
 const red = '#ff563f';
+let navigationController: any;
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}) {
+  navigationController = navigation;
+  const {getEvents} = useEvents();
+  const [dataSource, setDataSource] = useState([]);
+  const [firstEvent, setFirstEvent] = useState(null);
+
+  async function getData() {
+    var events = await getEvents();
+    const event1 = events.pop();
+    setFirstEvent(event1);
+    setDataSource(events);
+  }
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <View
@@ -20,7 +39,7 @@ export default function HomeScreen() {
       />
       <Header />
 
-      <Body />
+      <Body dataSource={dataSource} firstEvent={firstEvent} />
     </View>
   );
 }
@@ -40,7 +59,7 @@ function Header() {
   );
 }
 
-function Body() {
+function Body({dataSource, firstEvent}) {
   return (
     <View style={{flex: 1}}>
       <Text
@@ -61,15 +80,20 @@ function Body() {
             position: 'absolute',
           }}
         />
-        <ScrollView
-          style={{marginTop: 32}}
-          showsVerticalScrollIndicator={false}>
-          <FocusEventItem />
-          <EventItem />
-          <EventItem />
-          <EventItem />
-          <EventItem />
-        </ScrollView>
+
+        <FlatList
+          style={{
+            height: '100%',
+            marginTop: 24,
+          }}
+          ListHeaderComponent={() => <FocusEventItem event={firstEvent} />}
+          data={dataSource}
+          renderItem={(item) => (
+            <EventItem event={item.item} navigation={navigationController} />
+          )}
+          keyExtractor={(item) => item.id.toString()}
+          showsHorizontalScrollIndicator={false}
+        />
       </View>
     </View>
   );

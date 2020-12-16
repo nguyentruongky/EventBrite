@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, SafeAreaView, Dimensions, ScrollView} from 'react-native';
 import {Weight, getFont} from '@fonts';
 import AsyncImage from '@src/components/AsyncImage';
@@ -8,15 +8,42 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import TextButton from '@src/components/TextButton';
 import Body from './EventBodyView';
 import CircleButton from './CircleButton';
+import {ActionSheetIOS} from 'react-native';
+import {Event} from '@src/models/Event';
 
 const screenSize = Dimensions.get('window');
+export default function EventDetailScreen({route, navigation}) {
+  const [event, setEvent] = useState(null);
+  console.log('Event: ', event);
+  useEffect(() => {
+    const _event = route.params as Event;
+    setEvent(_event);
+  }, []);
 
-export default function EventDetailScreen() {
+  function onMenuPress() {
+    const options = [
+      'Share this event',
+      'Add to Calendar',
+      'Contact Organizer',
+      'Report event',
+      'Cancel',
+    ];
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: options,
+        destructiveButtonIndex: 2,
+        cancelButtonIndex: 4,
+      },
+      (buttonIndex) => {
+        console.log(`Button ${options[buttonIndex]} was pressed`);
+      },
+    );
+  }
   return (
     <View style={{flex: 1}}>
       <ScrollView style={{backgroundColor: 'white'}}>
-        <Header />
-        <Body />
+        {Header(event)}
+        {Body(event)}
       </ScrollView>
 
       <SafeAreaView
@@ -32,7 +59,11 @@ export default function EventDetailScreen() {
         <View style={{flexDirection: 'row'}}>
           <CircleButton Library={AntDesign} name="upload" />
           <View style={{width: 16}} />
-          <CircleButton Library={Entypo} name="dots-three-vertical" />
+          <CircleButton
+            Library={Entypo}
+            name="dots-three-vertical"
+            onPress={onMenuPress}
+          />
         </View>
       </SafeAreaView>
 
@@ -41,16 +72,14 @@ export default function EventDetailScreen() {
   );
 }
 
-function Header() {
+function Header(event: Event) {
   return (
     <View style={{height: 400, justifyContent: 'flex-end'}}>
       <View style={{position: 'absolute'}}>
         <AsyncImage
           height={400}
           width={screenSize.width}
-          uri={
-            'https://www.croatiaweek.com/wp-content/uploads/2019/12/101a2fe3-856c-46c3-a110-4e2bd1617ef9.jpg?x34489'
-          }
+          uri={event?.images[0].url}
         />
       </View>
 

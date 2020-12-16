@@ -44,7 +44,7 @@ export default function Tabs() {
           return getIcon(route.name, focused);
         },
       })}>
-      <Tab.Screen name="HomeScreen" component={EventDetailScreen} />
+      <Tab.Screen name="HomeScreen" component={HomeScreen} />
       <Tab.Screen name="SearchScreen" component={SearchScreen} />
       <Tab.Screen name="MyTicketScreen" component={MyTicketScreen} />
       <Tab.Screen name="FavoriteScreen" component={FavoriteScreen} />
