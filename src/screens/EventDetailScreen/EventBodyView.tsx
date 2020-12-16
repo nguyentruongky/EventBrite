@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Dimensions} from 'react-native';
+import {View, Text, Dimensions, Linking, Platform} from 'react-native';
 import {Weight, getFont} from '@fonts';
 import AsyncImage from '@src/components/AsyncImage';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -8,17 +8,19 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import TextButton from '@src/components/TextButton';
 import CircleButton from './CircleButton';
 import SimilarEventsView from './SimilarEventsView';
-import {Event} from '@src/models/Event';
+import {Event, Venue} from '@src/models/Event';
+import MapView, {Marker} from 'react-native-maps';
+import {StyleSheet} from 'react-native';
 
-export default function Body(event?: Event) {
+export default function Body(event: Event) {
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       {TitleView(event)}
-      <TimeView />
-      <LocationView />
-      <AboutView />
-      <MapDetailView />
-      <HostView />
+      {TimeView(event)}
+      {LocationView(event)}
+      {AboutView(event)}
+      {MapDetailView(event)}
+      {HostView(event)}
       <SimilarEventsView />
       <View style={{height: 32}} />
     </View>
@@ -49,7 +51,7 @@ function TitleView(event: Event) {
   );
 }
 
-function TimeView() {
+function TimeView(event: Event) {
   return (
     <View style={{marginTop: 32, marginHorizontal: 16, flexDirection: 'row'}}>
       <SimpleLineIcons name="calendar" size={24} color="gray" />
@@ -59,7 +61,12 @@ function TimeView() {
             ...getFont(Weight.semiBold, 15),
             color: '#393939',
           }}>
-          Friday, 28 Jun, 2020
+          {event?.startDate?.toLocaleDateString('en-us', {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })}
         </Text>
         <Text
           style={{
@@ -67,7 +74,10 @@ function TimeView() {
             marginVertical: 12,
             color: '#7b7b7b',
           }}>
-          05:00 PM - 08:00 PM GMT-7
+          {event?.startDate?.toLocaleTimeString('en-us', {
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
         </Text>
         <TextButton
           title="Add to Calendar"
@@ -84,7 +94,7 @@ function TimeView() {
   );
 }
 
-function LocationView() {
+function LocationView(event: Event) {
   return (
     <View style={{marginTop: 32, marginHorizontal: 16, flexDirection: 'row'}}>
       <SimpleLineIcons name="location-pin" size={24} color="gray" />
@@ -94,7 +104,7 @@ function LocationView() {
             ...getFont(Weight.semiBold, 15),
             color: '#393939',
           }}>
-          Westfield San Francisco Centre
+          {event?.venue?.name}
         </Text>
         <Text
           style={{
@@ -102,14 +112,14 @@ function LocationView() {
             marginVertical: 12,
             color: '#7b7b7b',
           }}>
-          865 Market St, San Francisco, CA 94103, USA
+          {event?.venue?.address}
         </Text>
       </View>
     </View>
   );
 }
 
-function AboutView() {
+function AboutView(event: Event) {
   return (
     <View style={{marginHorizontal: 16, marginTop: 32}}>
       <Text
@@ -125,12 +135,7 @@ function AboutView() {
           color: '#555555',
           marginTop: 16,
         }}>
-        Cornerstone content is the core of your website. It consists of the
-        best, most important articles on your site; the pages or posts you want
-        to rank highest in the search engines. Cornerstone articles are usually
-        relatively long, informative articles, combining insights from different
-        blog posts and covering everything that’s important about a certain
-        topic.
+        {event?.info}
       </Text>
 
       <TextButton
@@ -147,7 +152,16 @@ function AboutView() {
   );
 }
 
-function MapDetailView() {
+function MapDetailView(event: Event) {
+  const lat: number = event?.venue?.lat ?? 37.78825;
+  const long: number = event?.venue?.long ?? -122.4324;
+  function openMap(transportType: string) {
+    if (Platform.OS == 'ios') {
+      Linking.openURL(
+        `maps://app?daddr=${lat}+${long}&dirflg=${transportType}`,
+      );
+    }
+  }
   return (
     <View style={{marginVertical: 32}}>
       <Text
@@ -163,7 +177,24 @@ function MapDetailView() {
           backgroundColor: 'blue',
           height: 150,
           marginVertical: 16,
-        }}></View>
+        }}>
+        <MapView
+          style={{...StyleSheet.absoluteFillObject}}
+          region={{
+            latitude: lat,
+            longitude: long,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+          }}>
+          <Marker
+            coordinate={{
+              latitude: lat,
+              longitude: long,
+            }}
+          />
+        </MapView>
+        <View style={{flex: 1}} />
+      </View>
       <View
         style={{
           marginHorizontal: 16,
@@ -175,7 +206,7 @@ function MapDetailView() {
             ...getFont(Weight.semiBold, 15),
             color: '#393939',
           }}>
-          Westfield San Francisco Centre
+          {event?.venue?.name}
         </Text>
         <Text
           style={{
@@ -183,22 +214,34 @@ function MapDetailView() {
             marginVertical: 12,
             color: '#7b7b7b',
           }}>
-          865 Market St, San Francisco, CA 94103, USA
+          {event?.venue?.address}
         </Text>
 
         <View style={{flexDirection: 'row', marginTop: 16}}>
-          <CircleButton Library={Fontisto} name="car" />
+          <CircleButton
+            Library={Fontisto}
+            name="car"
+            onPress={() => openMap('d')}
+          />
           <View style={{width: 16}} />
-          <CircleButton Library={Ionicons} name="walk" />
+          <CircleButton
+            Library={Ionicons}
+            name="walk"
+            onPress={() => openMap('w')}
+          />
           <View style={{width: 16}} />
-          <CircleButton Library={Ionicons} name="ios-bus-outline" />
+          <CircleButton
+            Library={Ionicons}
+            name="ios-bus-outline"
+            onPress={() => openMap('r')}
+          />
         </View>
       </View>
     </View>
   );
 }
 
-function HostView() {
+function HostView(event: Event) {
   return (
     <View
       style={{
@@ -211,9 +254,7 @@ function HostView() {
         style={{borderRadius: 50}}
         height={100}
         width={100}
-        uri={
-          'https://www.croatiaweek.com/wp-content/uploads/2019/12/101a2fe3-856c-46c3-a110-4e2bd1617ef9.jpg?x34489'
-        }
+        uri={event?.venue?.imageUrl}
       />
       <Text
         style={{
@@ -221,7 +262,7 @@ function HostView() {
           marginVertical: 12,
           color: 'black',
         }}>
-        Westfield San Francisco Centre
+        {event?.hostName}
       </Text>
       <Text
         style={{

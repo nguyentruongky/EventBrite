@@ -52,6 +52,7 @@ export class Venue {
   lat: number;
   long: number;
   address: string;
+  imageUrl: string;
   constructor(raw: any) {
     this.name = raw['name'];
     this.id = raw['id'];
@@ -61,5 +62,9 @@ export class Venue {
     const city = raw['city']['name'];
     const state = raw['state']['name'];
     this.address = `${address}, ${city}, ${state}`;
+    const images = raw['images'] as [any];
+    if (images && images.length > 0) {
+      this.imageUrl = images[0]['url'];
+    }
   }
 }

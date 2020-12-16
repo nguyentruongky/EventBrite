@@ -11,7 +11,7 @@ export default function EventItem({event, navigation}) {
   const data = event as Event;
   return (
     <TouchableWithoutFeedback
-      onPress={() => navigation.push('EventDetailScreen', {data: event})}
+      onPress={() => navigation.push('EventDetailScreen', event)}
       style={{
         flexDirection: 'row',
         paddingTop: 32,

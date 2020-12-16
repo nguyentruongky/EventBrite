@@ -3,7 +3,7 @@ import restApiClient from '@src/utils/restApiClient';
 import Keys from '@src/utils/keys';
 import {Event} from '@src/models/Event';
 
-export default function useEvents() {
+export default function useEventsList() {
   const [isProcessing, setIsProcessing] = useState(false);
   async function getEvents() {
     // const url = `/events.json?apikey=${Keys.apiKey}`;

@@ -3,7 +3,7 @@ import {View, Text, SafeAreaView, FlatList} from 'react-native';
 import {Weight, getFont} from '@fonts';
 import FocusEventItem from './FocusedEventItem';
 import EventItem from './EventItem';
-import useEvents from '@src/hooks/useEvents';
+import useEventsList from '@src/hooks/useEventsList';
 import Screen from '@src/components/Screen';
 import EventDetailScreen from '../EventDetailScreen/EventDetailScreen';
 export const HomeRoutes = [Screen(EventDetailScreen)];
@@ -13,7 +13,7 @@ let navigationController: any;
 
 export default function HomeScreen({navigation}) {
   navigationController = navigation;
-  const {getEvents} = useEvents();
+  const {getEvents} = useEventsList();
   const [dataSource, setDataSource] = useState([]);
   const [firstEvent, setFirstEvent] = useState(null);
 
@@ -86,7 +86,12 @@ function Body({dataSource, firstEvent}) {
             height: '100%',
             marginTop: 24,
           }}
-          ListHeaderComponent={() => <FocusEventItem event={firstEvent} />}
+          ListHeaderComponent={() => (
+            <FocusEventItem
+              event={firstEvent}
+              navigation={navigationController}
+            />
+          )}
           data={dataSource}
           renderItem={(item) => (
             <EventItem event={item.item} navigation={navigationController} />

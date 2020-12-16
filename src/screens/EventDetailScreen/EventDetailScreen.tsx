@@ -14,7 +14,6 @@ import {Event} from '@src/models/Event';
 const screenSize = Dimensions.get('window');
 export default function EventDetailScreen({route, navigation}) {
   const [event, setEvent] = useState(null);
-  console.log('Event: ', event);
   useEffect(() => {
     const _event = route.params as Event;
     setEvent(_event);
@@ -42,7 +41,7 @@ export default function EventDetailScreen({route, navigation}) {
   return (
     <View style={{flex: 1}}>
       <ScrollView style={{backgroundColor: 'white'}}>
-        {Header(event)}
+        <Header imageUrl={event?.images[0].url} />
         {Body(event)}
       </ScrollView>
 
@@ -72,15 +71,11 @@ export default function EventDetailScreen({route, navigation}) {
   );
 }
 
-function Header(event: Event) {
+function Header({imageUrl}) {
   return (
     <View style={{height: 400, justifyContent: 'flex-end'}}>
       <View style={{position: 'absolute'}}>
-        <AsyncImage
-          height={400}
-          width={screenSize.width}
-          uri={event?.images[0].url}
-        />
+        <AsyncImage height={400} width={screenSize.width} uri={imageUrl} />
       </View>
 
       <View
@@ -105,7 +100,7 @@ function Header(event: Event) {
 
 function Footer() {
   return (
-    <View style={{backgroundColor: 'white'}}>
+    <SafeAreaView style={{backgroundColor: 'white'}}>
       <View style={{backgroundColor: '#7b7b7b', height: 0.5}} />
       <View
         style={{
@@ -152,6 +147,6 @@ function Footer() {
           onPress={{}}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
