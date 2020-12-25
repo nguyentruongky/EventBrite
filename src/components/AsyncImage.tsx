@@ -5,6 +5,7 @@ type Props = {
   placeholderColor?: string;
   width: any;
   height: any;
+  resizeMode?: string;
   style?: {
     [key: string]: any;
   };
@@ -25,7 +26,14 @@ export default class AsyncImage extends Component {
   }
 
   render() {
-    const {placeholderColor, style, width, height, uri} = this.props;
+    const {
+      placeholderColor,
+      resizeMode,
+      style,
+      width,
+      height,
+      uri,
+    } = this.props;
 
     return (
       <View style={{width: width, height: height}}>
@@ -35,7 +43,7 @@ export default class AsyncImage extends Component {
             style,
             {
               position: 'absolute',
-              resizeMode: 'cover',
+              resizeMode: resizeMode ?? 'cover',
               width: width,
               height: height,
             },

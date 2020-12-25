@@ -7,6 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Text, View} from 'react-native';
 import EventDetailScreen from '@src/screens/EventDetailScreen/EventDetailScreen';
+import SearchScreen from '@src/screens/SearchScreen/SearchScreen';
 
 const Tab = createBottomTabNavigator();
 const tabOptions = {
@@ -50,20 +51,6 @@ export default function Tabs() {
       <Tab.Screen name="FavoriteScreen" component={FavoriteScreen} />
       <Tab.Screen name="ProfileScreen" component={ProfileScreen} />
     </Tab.Navigator>
-  );
-}
-
-function SearchScreen() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: 'green',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-      <Text>Search Screen</Text>
-    </View>
   );
 }
 

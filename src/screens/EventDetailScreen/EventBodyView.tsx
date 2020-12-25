@@ -251,9 +251,10 @@ function HostView(event: Event) {
         alignItems: 'center',
       }}>
       <AsyncImage
-        style={{borderRadius: 50}}
+        style={{borderRadius: 50, backgroundColor: 'white'}}
         height={100}
         width={100}
+        resizeMode="contain"
         uri={event?.venue?.imageUrl}
       />
       <Text
